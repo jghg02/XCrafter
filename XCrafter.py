@@ -1,9 +1,10 @@
+#!/usr/bin/python
+
 import os
 import json
 import argparse
 import shutil
 import re
-
 
 def to_snake_case(name):
     name = re.sub(r'[\s\-]+', '_', name)
@@ -11,15 +12,22 @@ def to_snake_case(name):
     name = re.sub(r'_+', '_', name)  # Replace multiple underscores with a single underscore
     return name
 
-
 def to_camel_case(snake_str):
     components = snake_str.split('_')
     return components[0] + ''.join(x.title() for x in components[1:])
 
+def create_xcassets(asset_name, images_folder, output_folder=None, subfolder_name=None, enum_class_name=None):
+    # Define the default output path on the desktop if not provided
+    if output_folder is None:
+        desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
+        output_folder = os.path.join(desktop_path, asset_name)
+        print(f"No output folder specified. Using default: {output_folder}")
 
-def create_xcassets(asset_name, images_folder, subfolder_name=None, enum_class_name=None):
-    # Define the paths
-    xcassets_path = asset_name + ".xcassets"
+    # Create the output directory if it doesn't exist
+    os.makedirs(output_folder, exist_ok=True)
+
+    # Define the output paths
+    xcassets_path = os.path.join(output_folder, asset_name + ".xcassets")
     os.makedirs(xcassets_path, exist_ok=True)
 
     # Optionally create a subfolder inside .xcassets
@@ -28,8 +36,7 @@ def create_xcassets(asset_name, images_folder, subfolder_name=None, enum_class_n
         os.makedirs(xcassets_path, exist_ok=True)
 
     # List all images in the specified folder and filter out non-image files
-    images = [f for f in os.listdir(images_folder) if
-              f.endswith(('.png', '.svg')) and os.path.isfile(os.path.join(images_folder, f))]
+    images = [f for f in os.listdir(images_folder) if f.endswith(('.png', '.svg')) and os.path.isfile(os.path.join(images_folder, f))]
 
     # Group images by their base name (without @2x, @3x, etc.)
     image_groups = {}
@@ -51,7 +58,6 @@ def create_xcassets(asset_name, images_folder, subfolder_name=None, enum_class_n
         # Prepare the image entries for Contents.json
         images_json = []
         for image in image_group:
-            # Convert image name to snake case and lowercase if it is not already in the correct format
             snake_case_image = to_snake_case(os.path.splitext(image)[0]) + os.path.splitext(image)[1].lower()
 
             if image.endswith('.svg'):
@@ -98,39 +104,45 @@ def create_xcassets(asset_name, images_folder, subfolder_name=None, enum_class_n
 
     # Generate the Swift Enum if class name is provided
     if enum_class_name:
-        generate_swift_enum(enum_class_name, icon_cases)
+        generate_swift_enum(enum_class_name, icon_cases, output_folder)
 
-
-def generate_swift_enum(enum_class_name, cases):
+def generate_swift_enum(enum_class_name, cases, output_folder):
     enum_template = """
     import UIKit
 
-    enum %s: String {
-    %s
+    public enum %s: String, CaseIterable {
+        %s
+
+        static var allIcons: [%s] {
+            return %s.allCases
+        }
+
+        var iconName: String {
+            return rawValue
+        }
     }
     """
     enum_cases = "\n".join([f"    {case}" for case in cases])
-    enum_content = enum_template % (enum_class_name, enum_cases)
+    enum_content = enum_template % (enum_class_name, enum_cases, enum_class_name, enum_class_name)
 
-    with open(f"{enum_class_name}.swift", "w") as swift_file:
+    swift_file_path = os.path.join(output_folder, f"{enum_class_name}.swift")
+    with open(swift_file_path, 'w') as swift_file:
         swift_file.write(enum_content)
 
-    print(f"{enum_class_name}.swift file created with the following content:")
-    print(enum_content)
-
+    print(f"{enum_class_name}.swift file created at: {swift_file_path}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Create .xcassets folder structure for an Xcode project",
-        epilog="Example usage:\n  python create_xcassets.py -n MyIcon -i /path/to/images_folder -s SubfolderName --enum Icons",
+        epilog="Example usage:\n  python create_xcassets.py -n MyIcon -i /path/to/images_folder -o /path/to/output_folder -s SubfolderName --enum Icons",
         formatter_class=argparse.RawTextHelpFormatter
     )
-    parser.add_argument("-n", "--name", required=True,
-                        help="The name of the asset to create (will be converted to snake case)")
+    parser.add_argument("-n", "--name", required=True, help="The name of the asset to create (will be converted to snake case)")
     parser.add_argument("-i", "--images_folder", required=True, help="The folder containing the images")
+    parser.add_argument("-o", "--output_folder", help="The output folder to save the .xcassets and Swift enum")
     parser.add_argument("-s", "--subfolder", help="The name of the subfolder to create inside the .xcassets folder")
     parser.add_argument("--enum", help="The name of the Swift enum class to create")
 
     args = parser.parse_args()
 
-    create_xcassets(args.name, args.images_folder, args.subfolder, args.enum)
+    create_xcassets(args.name, args.images_folder, args.output_folder, args.subfolder, args.enum)
