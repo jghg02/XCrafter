@@ -20,11 +20,15 @@ A Python script to create an `.xcassets` folder structure for an Xcode project. 
 1. Clone this repository or download the script.
 
 ```sh
-git clone https://github.com/yourusername/xcassets-creator.git
-cd xcassets-creator
+git clone git@github.com:jghg02/XCrafter.git
+cd XCrafter
 ```
 
 2. Ensure you have Python 3 installed on your machine.
+
+3. Execute the `setup.sh` script and then reload your terminal.
+
+4. Ensure you could execute `xcrafter` in your terminal.
 
 ## Usage
 
@@ -34,6 +38,7 @@ Command-line Arguments
 
 	• -n, --name: (Required) The name of the asset to create (will be converted to snake case).
 	• -i, --images_folder: (Required) The folder containing the images.
+	• -o, --output_folder: The output folder to save the .xcassets and Swift enum. By default the path are in your `Desktop`.
 	• -s, --subfolder: The name of the subfolder to create inside the .xcassets folder.
 	• --enum: The name of the Swift enum class to create. If not provided, the enum will not be generated.
 
@@ -42,22 +47,27 @@ Command-line Arguments
 
 1.	Create an .xcassets folder named MyIcon.xcassets with images from the specified folder:
 ```sh
-python XCrafter.py -n MyIcon -i /path/to/images_folder
+xcrafter -n MyIcon -i /path/to/images_folder
 ```
 
 2. Create an .xcassets folder named MyIcon.xcassets with images from the specified folder and create a subfolder inside .xcassets:
 ```sh
-python XCrafter.py -n MyIcon -i /path/to/images_folder -s MySubfolder
+xcrafter -n MyIcon -i /path/to/images_folder -s MySubfolder
 ```
 
 3. Create an .xcassets folder and generate a Swift enum named Icons:
 ```sh
-python XCrafter.py -n MyIcon -i /path/to/images_folder --enum Icons
+xcrafter -n MyIcon -i /path/to/images_folder --enum Icons
 ```
 
 4. Create an .xcassets folder, create a subfolder inside .xcassets, and generate a Swift enum:
 ```sh
-python XCrafter.py -n MyIcon -i /path/to/images_folder -s MySubfolder --enum Icons
+xcrafter -n MyIcon -i /path/to/images_folder -s MySubfolder --enum Icons
+```
+
+5. Create an .xcassets folder, create a subfolder inside .xcassets, generate a Swift enum and specify the output folder
+```sh
+xcrafter -n MyIcon -i /path/to/images_folder -s MySubfolder --enum Icons -o /your/path/here
 ```
 
 
@@ -73,16 +83,17 @@ For images ic_cog.svg and ic_undo_dos@2x.png, the generated enum would be:
 import UIKit
 
 public enum Icons: String, CaseIterable {
-    case cog = "ic_cog"
-    case undoDos = "ic_undo_dos"
+ case cog = "ic_cog"
+ case undoDos = "ic_undo_dos"
 
-	static var allIcons: [Icons] {
-    return Icons.allCases
-  }
+ static var allIcons: [Icons] {
+   return Icons.allCases
+ }
 
-  var iconName: String {
+ var iconName: String {
     return rawValue
-  }
+ }
 }
 ```
 
+And then you can drag and drop into your Xcode project. 
