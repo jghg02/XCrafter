@@ -32,10 +32,33 @@ The script provides several options to customize the creation of the .xcassets f
 
 Command-line Arguments
 
-	•	-n, --name: (Required) The name of the asset to create (will be converted to snake case).
-	•	-i, --images_folder: (Required) The folder containing the images.
-	•	-s, --subfolder: The name of the subfolder to create inside the .xcassets folder.
-	•	--enum: The name of the Swift enum class to create. If not provided, the enum will not be generated.
+	• -n, --name: (Required) The name of the asset to create (will be converted to snake case).
+	• -i, --images_folder: (Required) The folder containing the images.
+	• -s, --subfolder: The name of the subfolder to create inside the .xcassets folder.
+	• --enum: The name of the Swift enum class to create. If not provided, the enum will not be generated.
+
+
+## Example Usage
+
+1.	Create an .xcassets folder named MyIcon.xcassets with images from the specified folder:
+```sh
+python XCrafter.py -n MyIcon -i /path/to/images_folder
+```
+
+2. Create an .xcassets folder named MyIcon.xcassets with images from the specified folder and create a subfolder inside .xcassets:
+```sh
+python XCrafter.py -n MyIcon -i /path/to/images_folder -s MySubfolder
+```
+
+3. Create an .xcassets folder and generate a Swift enum named Icons:
+```sh
+python XCrafter.py -n MyIcon -i /path/to/images_folder --enum Icons
+```
+
+4. Create an .xcassets folder, create a subfolder inside .xcassets, and generate a Swift enum:
+```sh
+python XCrafter.py -n MyIcon -i /path/to/images_folder -s MySubfolder --enum Icons
+```
 
 
 ## Generated Swift Enum
@@ -49,9 +72,17 @@ For images ic_cog.svg and ic_undo_dos@2x.png, the generated enum would be:
 ```swift
 import UIKit
 
-enum Icons: String {
+public enum Icons: String, CaseIterable {
     case cog = "ic_cog"
     case undoDos = "ic_undo_dos"
+
+	static var allIcons: [Icons] {
+    return Icons.allCases
+  }
+
+  var iconName: String {
+    return rawValue
+  }
 }
 ```
 
