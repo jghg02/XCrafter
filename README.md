@@ -77,10 +77,14 @@ If the --enum parameter is provided, the script generates a Swift enum with case
 
 ## Example
 
-| Folder Images  | XCAssest  | 
+| Folder Images PNG  | XCAssest  | 
 |:------------- |:---------------:|
 | ![CleanShot 2024-06-03 at 11 34 21@2x](https://github.com/nicklockwood/SwiftFormat/assets/1470487/e8c30fe4-cb46-459b-85ff-b885bb0f5f1c)  | ![CleanShot 2024-06-03 at 11 38 22@2x](https://github.com/nicklockwood/SwiftFormat/assets/1470487/28c9ff21-543f-4997-87b7-96b1486b6961)          |
 
+
+| Folder Images SVG  | XCAssest  | 
+|:------------- |:---------------:|
+| ![CleanShot 2024-06-03 at 11 45 45@2x](https://github.com/nicklockwood/SwiftFormat/assets/1470487/5941480a-cb09-4231-8fb6-2f2e1a1d9127) | ![CleanShot 2024-06-03 at 11 44 55@2x](https://github.com/nicklockwood/SwiftFormat/assets/1470487/d654068f-1a9f-485c-90e5-4ab14b92b4b3)  |
 
 For images ic_cog.svg and ic_undo_dos@2x.png, the generated enum would be:
 
