@@ -3,6 +3,13 @@
 
 A Python script to create an `.xcassets` folder structure for an Xcode project. The script can process images, create image sets, and optionally generate a Swift enum to reference the assets.
 
+
+![XCrafter](https://github.com/nicklockwood/SwiftFormat/assets/1470487/7436ca5b-a48d-4aa9-bcd8-de870b36cf95)
+
+https://github.com/nicklockwood/SwiftFormat/assets/1470487/6e72445d-c17f-40d1-b28e-a2ee34949509
+
+
+
 ## Features
 
 - Convert image names to snake_case.
