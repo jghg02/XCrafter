@@ -75,7 +75,12 @@ xcrafter -n MyIcon -i /path/to/images_folder -s MySubfolder --enum Icons -o /you
 
 If the --enum parameter is provided, the script generates a Swift enum with cases for each image base name. The enum case names are in camel case, while the raw values are in snake case.
 
-Example
+## Example
+
+| Folder Images  | XCAssest  | 
+|:------------- |:---------------:|
+| ![CleanShot 2024-06-03 at 11 34 21@2x](https://github.com/nicklockwood/SwiftFormat/assets/1470487/e8c30fe4-cb46-459b-85ff-b885bb0f5f1c)  | ![CleanShot 2024-06-03 at 11 38 22@2x](https://github.com/nicklockwood/SwiftFormat/assets/1470487/28c9ff21-543f-4997-87b7-96b1486b6961)          |
+
 
 For images ic_cog.svg and ic_undo_dos@2x.png, the generated enum would be:
 
