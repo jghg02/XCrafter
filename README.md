@@ -46,6 +46,7 @@ Command-line Arguments
 	• -o, --output_folder: The output folder to save the .xcassets and Swift enum. By default the path are in your `Desktop`.
 	• -s, --subfolder: The name of the subfolder to create inside the .xcassets folder.
 	• --enum: The name of the Swift enum class to create. If not provided, the enum will not be generated.
+ 	• -h: Show helper.
 
 
 ## Example Usage
